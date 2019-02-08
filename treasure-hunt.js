@@ -1,12 +1,12 @@
 var axios = require('axios');
-
+require('dotenv').config();
 //Set up map
 var map = {};
 currentRoom = {};
 
 const init = () => {
 	let initURL = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/init/';
-	const apiKey = 'Token ' + '30e68dddf4426b85e7c98644cf2feb9c5a3d302a';
+	const apiKey = 'Token ' + process.env.API_KEY;
 	const options = {
 		headers: {
 			Authorization: apiKey
@@ -34,7 +34,7 @@ const travel = dir => {
 	const options = {
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: 'Token ' + '30e68dddf4426b85e7c98644cf2feb9c5a3d302a'
+			Authorization: 'Token ' + process.env.API_KEY
 		}
 	};
 
