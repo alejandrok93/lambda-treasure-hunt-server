@@ -45,6 +45,47 @@ const travel = dir => {
 		})
 		.catch(err => console.log(err));
 };
+take = () => {
+	const takeURL = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/take/';
+	const apiKey = 'Token ' + process.env.REACT_APP_API_KEY;
+	const options = {
+		headers: {
+			Authorization: apiKey
+		}
+	};
+
+	const data = {
+		name: 'treasure'
+	};
+
+	axios
+		.post(takeURL, data, options)
+		.then(response => {
+			console.log(response.data);
+		})
+		.catch(err => console.log(err));
+};
+
+drop = () => {
+	const takeURL = 'https://lambda-treasure-hunt.herokuapp.com/api/adv/drop/';
+	const apiKey = 'Token ' + process.env.REACT_APP_API_KEY;
+	const options = {
+		headers: {
+			Authorization: apiKey
+		}
+	};
+
+	const data = {
+		name: 'treasure'
+	};
+
+	axios
+		.post(takeURL, data, options)
+		.then(response => {
+			console.log(response.data);
+		})
+		.catch(err => console.log(err));
+};
 
 const traverse = () => {
 	console.log('Begin traversing...');
