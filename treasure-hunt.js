@@ -96,6 +96,36 @@ drop = () => {
 		.catch(err => console.log(err));
 };
 
+backtrack = currentRoom => {
+	let q = [];
+	let visited = new Set();
+	let map = JSON.parse(localStorage.getItem('map'));
+	q.push([currentRoom]);
+	while (q.length > 0) {
+		let path = q.shift();
+		console.log('path', path);
+
+		let node = path[path.length - 1];
+		console.log('node ', node);
+		console.log(map);
+		console.log('map[node]', map[node]);
+		if (!visited.has(node)) {
+			visited.add(node);
+			for (let [exit, room] of Object.entries(map[node])) {
+				console.log('exit', exit);
+				if (map[node][exit] == '?') {
+					return path;
+				} else {
+					let path_copy = path.slice();
+					path_copy.push(map[node][exit]);
+					q.push(path_copy);
+				}
+			}
+		}
+	}
+	return null;
+};
+
 const traverse = () => {
 	console.log('Begin traversing...');
 	// get map from state
