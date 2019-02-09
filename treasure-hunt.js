@@ -37,6 +37,15 @@ const travel = dir => {
 			Authorization: 'Token ' + process.env.API_KEY
 		}
 	};
+	//check to see if we know what room is in that direction
+	let next_room_id = null;
+	const map = JSON.parse(localStorage.getItem('map'));
+	if (this.state.currentRoom.room_id in map) {
+		if (map[this.state.currentRoom.room_id][dir] != '?') {
+			next_room_id = map[this.state.currentRoom.room_id][dir];
+			data[next_room_id] = next_room_id;
+		}
+	}
 
 	axios
 		.post(moveURL, data, options)
