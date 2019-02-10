@@ -27,6 +27,70 @@ const init = () => {
 		.catch(err => console.log(err));
 };
 
+moveAround = () => {
+	let currentRoom = this.state.currentRoom;
+	console.log('Current room:', currentRoom.room_id);
+	console.log('Current map:');
+	let map = JSON.parse(localStorage.getItem('map'));
+	console.log(map);
+	let currentRoomExits = map[currentRoom.room_id];
+
+	let unexplored = [];
+	console.log(currentRoomExits);
+
+	for (let direction in currentRoomExits) {
+		console.log(direction);
+		if (currentRoomExits[direction] === '?') {
+			unexplored.push(direction);
+		}
+	}
+	console.log(unexplored);
+	if (unexplored.length > 0) {
+		// go to room
+		let direction = unexplored.pop();
+		this.travel(direction);
+	} else {
+		//reached a dead end
+		//back track to prev room with unexplored exits
+		console.log(
+			'no unexplored exits available in room ' +
+				currentRoom.room_id +
+				', need to go back'
+		);
+
+		if (!(currentRoom.room_id in map)) {
+			console.log('map does not have current room in graph');
+		}
+		let path = this.backtrack(currentRoom.room_id);
+		if (path === null) {
+			// no more unexplored rooms
+			console.log('done traversing!');
+		} else {
+			console.log('path', path);
+			let directions_to_shortest = [];
+			let currentRoom = path.shift();
+			console.log(currentRoom);
+			console.log('map[currentRoom]', map[currentRoom]);
+			for (let room of path) {
+				for (let direction in map[currentRoom]) {
+					console.log(direction);
+					if (map[currentRoom][direction] === room) {
+						directions_to_shortest.push(direction);
+						// currentRoom = room;
+						// break;
+					}
+				}
+			}
+			for (let direction of directions_to_shortest) {
+				setTimeout(
+					this.travel(direction),
+					this.state.currentRoom.cooldown * 1000
+				);
+			}
+		}
+	}
+};
+
 const travel = dir => {
 	console.log('lets travel ' + dir.toUpperCase());
 	const data = { direction: dir };
@@ -127,6 +191,7 @@ backtrack = currentRoom => {
 };
 
 const traverse = () => {
+	//need to call moveAround ?
 	console.log('Begin traversing...');
 	// get map from state
 	// while map.length < 500
@@ -143,7 +208,7 @@ const traverse = () => {
 		console.log(currentRoom);
 		let currentRoomExits = currentRoom.exits;
 		let unexplored = [];
-		for (let direction of currentRoomExits) {
+		for (let direction in currentRoomExits) {
 			unexplored.push(direction);
 		}
 		console.log(unexplored);
